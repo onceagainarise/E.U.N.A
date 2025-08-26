@@ -355,20 +355,6 @@ MIT License - see LICENSE file for details.
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📞 Support
 
-- **Documentation**: Check this README and code comments
-- **Issues**: Create GitHub issues for bugs and feature requests
-- **Discussions**: Use GitHub discussions for questions
-
-## 🙏 Acknowledgments
-
-- **GROQ**: For powerful LLM capabilities
-- **Pinecone**: For vector database services
-- **FastAPI**: For robust API framework
-- **Streamlit**: For beautiful web interface
-- **SQLAlchemy**: For database management
-
----
 
 **EUNA MVP** - Demonstrating the future of AI agent orchestration through dynamic, specialized agent creation and intelligent task coordination.
