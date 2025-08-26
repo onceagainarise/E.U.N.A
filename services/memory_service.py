@@ -26,15 +26,17 @@ class MemoryService:
     
     def __init__(self):
         self.index = None
-        self.dimension = 1536  # Standard embedding dimension
+        self.dimension = 1024  # Standard embedding dimension
         self.fallback_memory = {}  # In-memory fallback
         
-        if PINECONE_AVAILABLE:
+        if PINECONE_AVAILABLE and settings.pinecone_api_key:
             try:
                 self._initialize_pinecone()
             except Exception as e:
                 logger.warning(f"Failed to initialize Pinecone: {e}. Using fallback memory.")
-                PINECONE_AVAILABLE = False
+        else:
+            if not settings.pinecone_api_key:
+                logger.warning("Pinecone API key not provided, using fallback memory service")
     
     def _initialize_pinecone(self):
         """Initialize Pinecone connection and index."""

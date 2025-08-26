@@ -80,7 +80,7 @@ class TaskLog(Base):
     task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
     level = Column(String(20), default="INFO")  # DEBUG, INFO, WARNING, ERROR
     message = Column(Text, nullable=False)
-    metadata = Column(JSON, nullable=True)
+    log_metadata = Column(JSON, nullable=True)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     
     # Relationships
@@ -109,7 +109,7 @@ class MemoryEntry(Base):
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text, nullable=False)
     content_type = Column(String(50), nullable=False)  # task_result, user_preference, learned_pattern
-    metadata = Column(JSON, nullable=True)
+    entry_metadata = Column(JSON, nullable=True)
     embedding_id = Column(String(100), nullable=True)  # Pinecone vector ID
     relevance_score = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

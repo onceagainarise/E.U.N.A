@@ -218,12 +218,12 @@ async def list_recent_tasks(limit: int = 10):
         return {
             "tasks": [
                 {
-                    "task_id": task.id,
-                    "user_input": task.user_input[:100] + "..." if len(task.user_input) > 100 else task.user_input,
-                    "status": task.status,
-                    "priority": task.priority,
-                    "created_at": task.created_at.isoformat(),
-                    "completed_at": task.completed_at.isoformat() if task.completed_at else None
+                    "task_id": task["id"],
+                    "user_input": task["user_input"][:100] + "..." if len(task["user_input"]) > 100 else task["user_input"],
+                    "status": task["status"],
+                    "priority": task["priority"],
+                    "created_at": task["created_at"].isoformat(),
+                    "completed_at": task["completed_at"].isoformat() if task["completed_at"] else None
                 }
                 for task in tasks
             ]
@@ -358,8 +358,8 @@ async def get_system_stats():
     try:
         # Get task statistics
         recent_tasks = await db_service.get_recent_tasks(limit=100)
-        completed_tasks = [t for t in recent_tasks if t.status == "completed"]
-        failed_tasks = [t for t in recent_tasks if t.status == "failed"]
+        completed_tasks = [t for t in recent_tasks if t["status"] == "completed"]
+        failed_tasks = [t for t in recent_tasks if t["status"] == "failed"]
         
         # Get tool usage stats
         from tools.tool_executor import tool_executor
@@ -406,12 +406,20 @@ async def websocket_endpoint(websocket: WebSocket):
 # Error handlers
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
-    return {"error": "Endpoint not found", "detail": str(exc)}
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=404,
+        content={"error": "Endpoint not found", "detail": str(exc)}
+    )
 
 @app.exception_handler(500)
 async def internal_error_handler(request, exc):
+    from fastapi.responses import JSONResponse
     logger.error(f"Internal server error: {exc}")
-    return {"error": "Internal server error", "detail": "An unexpected error occurred"}
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal server error", "detail": "An unexpected error occurred"}
+    )
 
 # Main execution
 if __name__ == "__main__":

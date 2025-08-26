@@ -28,9 +28,9 @@ class TaskOrchestrator:
         """Submit a new task for processing."""
         
         try:
-            # Create task in database
+            # Create task in database (returns dict)
             task = await db_service.create_task(user_input, priority)
-            task_id = task.id
+            task_id = task["id"]
             
             # Log task submission
             await db_service.add_task_log(

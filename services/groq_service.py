@@ -15,8 +15,12 @@ class GroqService:
     """Service for interacting with GROQ LLM API."""
     
     def __init__(self):
-        self.client = Groq(api_key=settings.groq_api_key)
-        self.default_model = "mixtral-8x7b-32768"
+        if settings.groq_api_key:
+            self.client = Groq(api_key=settings.groq_api_key)
+        else:
+            self.client = None
+            logger.warning("GROQ API key not provided, service will use fallback responses")
+        self.default_model = "deepseek-r1-distill-llama-70b"
         self.max_retries = 3
     
     async def analyze_task(self, user_input: str, context: Optional[Dict] = None) -> Dict[str, Any]:
@@ -251,6 +255,10 @@ Synthesize these results into a comprehensive response."""
     async def _make_completion_request(self, system_prompt: str, user_prompt: str, 
                                      temperature: float = 0.1, max_tokens: int = 2000) -> str:
         """Make a completion request to GROQ API with retry logic."""
+        
+        if not self.client:
+            logger.warning("GROQ client not available, returning fallback response")
+            return '{"error": "GROQ API not available", "fallback": true}'
         
         for attempt in range(self.max_retries):
             try:

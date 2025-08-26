@@ -10,11 +10,11 @@ class Settings(BaseSettings):
     """Application settings."""
     
     # GROQ Configuration
-    groq_api_key: str = Field(..., env="GROQ_API_KEY")
+    groq_api_key: Optional[str] = Field(default=None, env="GROQ_API_KEY")
     
     # Pinecone Configuration
-    pinecone_api_key: str = Field(..., env="PINECONE_API_KEY")
-    pinecone_environment: str = Field(..., env="PINECONE_ENVIRONMENT")
+    pinecone_api_key: Optional[str] = Field(default=None, env="PINECONE_API_KEY")
+    pinecone_environment: Optional[str] = Field(default=None, env="PINECONE_ENVIRONMENT")
     pinecone_index_name: str = Field(default="euna-memory", env="PINECONE_INDEX_NAME")
     
     # Database Configuration
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     
     # Application Configuration
     debug: bool = Field(default=True, env="DEBUG")
-    log_level: str = Field(default="INFO", env="LOG_LEVEL")
+    log_level: str = Field(default="INFO", env="LOG_LEVEL").
     max_agents: int = Field(default=10, env="MAX_AGENTS")
     task_timeout: int = Field(default=300, env="TASK_TIMEOUT")
     
